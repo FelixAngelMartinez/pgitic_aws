@@ -1,9 +1,18 @@
-.vagrant
-/cookbooks
 
-# Bundler
-bin/*
-.bundle/*
+# Created by https://www.gitignore.io/api/ansible,vagrant
+# Edit at https://www.gitignore.io/?templates=ansible,vagrant
 
-.kitchen/
-.kitchen.local.yml
+### Ansible ###
+*.retry
+
+### Vagrant ###
+# General
+.vagrant/*
+
+# Log files (if you are creating logs in debug mode, uncomment this)
+# *.log
+
+### Vagrant Patch ###
+*.box
+
+# End of https://www.gitignore.io/api/ansible,vagrant

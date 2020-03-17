@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Solución al bug con el plugin de vagrant vagrant-aws
+class Hash
+  def slice(*keep_keys)
+    h = {}
+    keep_keys.each { |key| h[key] = fetch(key) if has_key?(key) }
+    h
+  end unless Hash.method_defined?(:slice)
+  def except(*less_keys)
+    slice(*keys - less_keys)
+  end unless Hash.method_defined?(:except)
+end
+
+# Importamos el plugin del proveedor AWS
+require 'vagrant-aws'
+
+# Creating and configuring the AWS instance
+Vagrant.configure("2") do |config|
+    config.vm.box = "dummy"
+    config.ssh.keys_only = false
+    
+    config.vm.provider :aws do |aws, override|
+        # Read AWS authentication information from environment variables
+        #aws.access_key_id = ""
+        #aws.secret_access_key = ""
+        
+        # Especificar el Keypair a utilizar
+        aws.keypair_name = "pgitic-aws"
+        
+        # Cambiar tipo de instancia, por defecto coge una m3.medium (no gratuita, depreciada)
+        aws.instance_type = "t2.micro"
+        aws.ami = "ami-006a0174c6c25ac06"
+        # Grupo de seguridad que acepte conexiones SSH puerto 22
+        aws.security_groups = ['vagrant']
+        
+        # Sobreescribir usuario y ruta de clave privada
+        override.ssh.username = "ubuntu"
+        override.ssh.private_key_path = "~/aws_repo/pgitic-aws.pem"
+    end
+end
