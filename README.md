@@ -24,6 +24,10 @@ $ wget https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
 $ sudo dpkg -i vagrant_2.2.7_x86_64.deb
 $ vagrant --version
 ```
+Creamos la imagen dummy:
+```
+vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+```
 
 ### Configuración AWS:
 En este caso vamos a realizar la instanciación en la región de Londres de AWS, más específicamente en **eu-west-2**, lo que afectará a la hora de configurar y de acceder a la consola de administración.
@@ -37,7 +41,10 @@ Pegamos nuestra clave con el nombre "pgitic-aws.pem"
 ```
 $ sudo cp pgitic-aws.pem ~/aws_repo/
 ```
-
+Le damos permisos a nuestra clave:
+```
+$ sudo chmod 400 pgitic-aws.pem
+```
 ### Instalación plugin AWS para Vagrant:
 ```
 $ sudo apt install -y python-pip
@@ -50,11 +57,18 @@ Creamos un fichero llamado "config" y le añadimos lo siguiente:
 [default]
 region = eu-west-2
 ```
+Tenemos que obtener nuestras claves de AWS, para ello lo que haremos será dirigirnos a IAM de AWS, ir a la pestaña de Usuarios y crear un usuario dentro del grupo administrador y apuntar las claves.
 Creamos un fichero llamado "credentials" y le añadimos lo siguiente:
 ```
 aws_access_key_id = <USUARIOAMAZON>
 aws_secret_access_key = <CONTRASEÑUSUARIO>
 ```
+Añadimos también como variables de entorno dichas credenciales:
+```
+$ export aws_access_key_id=''
+$ export aws_secret_access_key=''
+```
+
 Nota: si falla el instalador, ejecutar:
 ```
 $ sudo apt --fix-broken install

@@ -1,0 +1,18 @@
+---
+- hosts: aws
+  #remote_user: ec2-user
+  gather_facts: yes
+  tasks:
+  - name: Prueba ping
+    ping:
+  # Gather EC2 metadata facts
+  - ec2_metadata_facts:
+  - debug:
+      msg: "This instance is a t2.micro"
+    when: ansible_ec2_instance_type == "t2.micro"
+
+  
+
+
+
+...
