@@ -76,7 +76,7 @@ $ sudo apt --fix-broken install
 ## Ejecución:
 Nos dirigimos al directorio /src que es donde encontramos tanto el playbook de Ansible como de Vagrant y ejecutamos:
 ```
-$ vagrant up
+$ vagrant up --provider=aws
 ```
 
 ## Licencia:
