@@ -1,0 +1,16 @@
+---
+- name: Aprovisionar instancia EC2 con Apache
+  hosts: all
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name: Actualizar cache apt e instalar apache2
+    apt:
+      update_cache: yes
+      name: apache2
+  - name: Verificar localhost
+    uri:
+      url: http://localhost:80
+      method: GET
+      status_code: 200
+...

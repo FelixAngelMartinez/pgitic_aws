@@ -16,3 +16,6 @@
 *.box
 
 # End of https://www.gitignore.io/api/ansible,vagrant
+
+# Evitar archivo de credenciales
+*.pem

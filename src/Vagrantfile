@@ -16,27 +16,35 @@ end
 # Importamos el plugin del proveedor AWS
 require 'vagrant-aws'
 
-# Creating and configuring the AWS instance
+# Crear y configurar una instancia de AWS
 Vagrant.configure("2") do |config|
-    config.vm.box = "dummy"
+    config.vm.box = "aws-dummy"
     config.ssh.keys_only = false
     
-    config.vm.provider :aws do |aws, override|
-        # Read AWS authentication information from environment variables
-        #aws.access_key_id = ""
-        #aws.secret_access_key = ""
-        
+    config.vm.provider :aws do |aws, override|      
+       
         # Especificar el Keypair a utilizar
-        aws.keypair_name = "pgitic-aws"
-        
+        aws.keypair_name = "pgitic-key"
+        # Insertar claves directamente en Vagrant
+        #aws.access_key_id = "XXXXXXXXXXXXXXXXXX"
+        #aws.secret_access_key = "XXXXXXXXXXXXXXXXXX"
         # Cambiar tipo de instancia, por defecto coge una m3.medium (no gratuita, depreciada)
         aws.instance_type = "t2.micro"
         aws.ami = "ami-006a0174c6c25ac06"
         # Grupo de seguridad que acepte conexiones SSH puerto 22
         aws.security_groups = ['vagrant']
-        
+        # Etiquetas
+        aws.tags = {
+	        'Provider' => 'Vagrant'
+        }
         # Sobreescribir usuario y ruta de clave privada
         override.ssh.username = "ubuntu"
-        override.ssh.private_key_path = "~/aws_repo/pgitic-aws.pem"
+        override.ssh.private_key_path = "./config/pgitic-key.pem"
     end
+
+    #Aprovisionar instancia AWS
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provision.yml"
+      ansible.host_key_checking = "false"
+    end 
 end
