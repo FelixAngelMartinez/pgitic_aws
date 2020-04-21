@@ -31,6 +31,8 @@ Vagrant.configure("2") do |config|
         # Cambiar tipo de instancia, por defecto coge una m3.medium (no gratuita, depreciada)
         aws.instance_type = "t2.micro"
         aws.ami = "ami-006a0174c6c25ac06"
+        # Cambiar región, por defecto coge us-east-1
+        aws.region = "eu-west-2"
         # Grupo de seguridad que acepte conexiones SSH puerto 22
         aws.security_groups = ['vagrant']
         # Etiquetas
@@ -43,8 +45,8 @@ Vagrant.configure("2") do |config|
     end
 
     #Aprovisionar instancia AWS
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provision.yml"
-      ansible.host_key_checking = "false"
-    end 
+    #config.vm.provision "ansible" do |ansible|
+    #  ansible.playbook = "provision.yml"
+    #  ansible.host_key_checking = "false"
+    #end 
 end

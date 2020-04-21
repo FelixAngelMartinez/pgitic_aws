@@ -1,0 +1,46 @@
+---
+- name: Crear instancia EC2 y añadirla a un grupo de hosts
+  hosts: localhost
+  tasks:
+  - name: Crear instancia AWS EC2 t2.micro
+    ec2:
+      key_name: pgitic-key
+      instance_type: t2.micro
+      image: ami-006a0174c6c25ac06
+      wait: yes
+      group: vagrant
+      count: 1
+      vpc_subnet_id: subnet-21199e5b
+      assign_public_ip: yes
+      region: eu-west-2
+    register: ec2
+
+  - name: Añadir nueva instancia al grupo de hosts
+    add_host:
+      hostname: "{{ item.public_ip }}"
+      groupname: ec2_pgitic
+    loop: "{{ ec2.instances }}"
+
+  - name: Esperar a que la conexión SSH esté levantada
+    delegate_to: "{{ item.public_dns_name }}"
+    wait_for_connection:
+      delay: 60
+      timeout: 300
+    loop: "{{ ec2.instances }}"
+    remote_user: ubuntu
+
+- name: Aprovisionar instancia EC2 creada con Ansible
+  hosts: ec2_pgitic
+  become: yes
+  remote_user: ubuntu
+  tasks:
+  - name: Actualizar cache apt e instalar apache2
+    apt:
+      update_cache: yes
+      name: apache2
+  - name: Verificar localhost
+    uri:
+      url: http://localhost:80
+      method: GET
+      status_code: 200
+...

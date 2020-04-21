@@ -80,7 +80,7 @@ $ vagrant up --provider=aws
 ```
 
 ## Licencia:
-Proyecto bajo licencia [LICENSE.md](LICENSE.md)
+Proyecto bajo licencia [LICENSE](LICENSE)
 
 ---
 _Proyecto realizado por:_
